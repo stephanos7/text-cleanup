@@ -1,3 +1,15 @@
+.text-input {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 800px;
+  min-height: 240px;
+  padding: 12px;
+  font: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  overflow-wrap: anywhere;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

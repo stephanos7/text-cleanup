@@ -14,8 +14,16 @@ function App() {
           <img src={reactLogo} className="framework" alt="React logo" />
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
-{/* do things here */}
-
+        {/* do things here */}
+        <label htmlFor="text-input">Text to clean</label>
+        <div style={{width:"100%", padding:20,backgroundColor:"blue", display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+          <textarea
+            id="text-input"
+            className="long-text-input"
+            placeholder="Paste or type your text here..."
+            rows={18}
+          />
+        </div>
       </section>
 
       <div className="ticks"></div>
@@ -104,7 +112,7 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
-  )
+  );
 }
 
 export default App
