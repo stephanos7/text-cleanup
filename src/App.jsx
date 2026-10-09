@@ -5,7 +5,11 @@ import viteLogo from './assets/vite.svg'
 import './App.css'
 
 function App() {
-
+  const [text, setText] = useState(()=> 'Placeholder goes here...');
+  const handleTextChange = (event) => {
+    setText(event.target.value);
+  }
+  console.log("what is text?", text)
   return (
     <>
       <section id="center">
@@ -20,8 +24,9 @@ function App() {
           <textarea
             id="text-input"
             className="long-text-input"
-            placeholder="Paste or type your text here..."
+            placeholder={text}
             rows={18}
+            onChange={handleTextChange}
           />
         </div>
       </section>
