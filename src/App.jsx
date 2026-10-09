@@ -1,15 +1,23 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
+// it doesn’t need access to anything inside App. React supplies its arguments when passed to useReducer.
+const textReducer = (_state, value) => {
+  return value;
+};
+
 function App() {
-  const [text, setText] = useState(()=> 'Placeholder goes here...');
+  // Hooks must run at the top level of a component or custom hook. we've replaced useState with useReducer
+  const [text, dispatch] = useReducer(textReducer, "hello?");
+
   const handleTextChange = (event) => {
-    setText(event.target.value);
-  }
-  console.log("what is text?", text)
+    dispatch(event.target.value);
+  };
+
+  console.log("text state is", text);
   return (
     <>
       <section id="center">
@@ -20,12 +28,22 @@ function App() {
         </div>
         {/* do things here */}
         <label htmlFor="text-input">Text to clean</label>
-        <div style={{width:"100%", padding:20,backgroundColor:"blue", display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+        <div
+          style={{
+            width: "100%",
+            padding: 20,
+            backgroundColor: "blue",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch"
+          }}
+        >
           <textarea
             id="text-input"
             className="long-text-input"
-            placeholder={text}
+            // placeholder={"Placeholder goes here..."}
             rows={18}
+            value={text}
             onChange={handleTextChange}
           />
         </div>
