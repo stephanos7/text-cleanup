@@ -20,20 +20,29 @@ const textReducer = (state, action) => {
   if (action.type === "EXTRA_SPACES_REMOVED") {
       return state.replace(/[ \t]+/g, " ");
   }
+  if (action.type === "BLANK_LINES_REMOVED") {
+    return state
+      .split(/\r?\n/)
+      .filter(line => line.trim() !== "")
+      .join("\n");;
+  }
 };
 
 
 function App() {
-  // Hooks must run at the top level of a component or custom hook. we've replaced useState with useReducer
+  // Hooks must run at the top level of a component or custom hook. 
+  // we've replaced useState with useReducer
   const [text, dispatch] = useReducer(textReducer, "hello?");
 
-  const handleTextChange = (event) => {
+  const handleTextChange = (event) => 
     dispatch({type: "TEXT_CHANGED", value: event.target.value});
-  };
+  ;
 
-  const handleRemoveExtraSpaces = () => {
+  const handleRemoveExtraSpaces = () => 
     dispatch({type: "EXTRA_SPACES_REMOVED"});
-  }
+  
+  const handleRemoveBlankLined = () => 
+    dispatch({type:"BLANK_LINES_REMOVED"})
 
   return (
     <>
@@ -56,6 +65,7 @@ function App() {
           }}
         >
           <button onClick={handleRemoveExtraSpaces}>Remove extra spaces</button>
+          <button onClick={handleRemoveBlankLined}>Remove blank lines</button>
           <textarea
             id="text-input"
             className="long-text-input"
