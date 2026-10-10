@@ -23,48 +23,46 @@ const initialState = {
 const textReducer = (state, action) => {
   let nextText;
 
-  if (action.type === "TEXT_CHANGED") {
+  if(action.type === "TEXT_CHANGED") {
     nextText = action.value;
-  }
-  if (action.type === "EXTRA_SPACES_REMOVED") {
+  } else if (action.type === "EXTRA_SPACES_REMOVED") {
     nextText = state.present.replace(/[ \t]+/g, " ");
-  }
-  if (action.type === "BLANK_LINES_REMOVED") {
+  } else if (action.type === "BLANK_LINES_REMOVED") {
     nextText = state.present
       .split(/\r?\n/)
       .filter((line) => line.trim() !== "")
       .join("\n");
-  }
-  if(action.type === "UNDO") {
+  } else if(action.type === "UNDO") {
     if (state.past.length === 0) return state;
-
         return {
           past: state.past.slice(1),
           present: state.past[0],
           future: [state.present, ...state.future]
         };
-    
-
-  }
-
-  if(action.type === "REDO") {
+  }else if(action.type === "REDO") {
     if (state.future.length === 0) return state;
-
-    return {
-      past: [state.present, ...state.past],
-      present: state.future[0],
-      future: state.future.slice(1)
-    };
+      return {
+        past: [state.present, ...state.past],
+        present: state.future[0],
+        future: state.future.slice(1)
+      };
+  } else {
+  
+    throw new Error("This action type isn't supported.");
   }
 
   // Don't record changes that leave the text identical.
-  if (nextText === state.present) return state;
+  if (nextText === state.present) {
+    return state;
+  } 
+
 
    return {
      past: [state.present, ...state.past],
      present: nextText,
      future: []
    };
+
 };
 
 
@@ -129,6 +127,10 @@ function App() {
           <button onClick={handleRedo} disabled={!canRedo}>
             Redo
           </button>
+          <button onClick={() => dispatch({type:"yolo"})} >
+            YOLO
+          </button>
+
           <textarea
             id="text-input"
             className="long-text-input"
