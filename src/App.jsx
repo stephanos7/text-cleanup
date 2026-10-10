@@ -17,7 +17,7 @@ const textReducer = (state, action) => {
   if (action.type === "TEXT_CHANGED"){
     return action.value
   }
-  if (action === "EXTRA_SPACES_REMOVED") {
+  if (action.type === "EXTRA_SPACES_REMOVED") {
       return state.replace(/[ \t]+/g, " ");
   }
 };
@@ -31,7 +31,10 @@ function App() {
     dispatch({type: "TEXT_CHANGED", value: event.target.value});
   };
 
-  console.log("text state is", text);
+  const handleRemoveExtraSpaces = () => {
+    dispatch({type: "EXTRA_SPACES_REMOVED"});
+  }
+
   return (
     <>
       <section id="center">
@@ -52,9 +55,7 @@ function App() {
             alignItems: "stretch"
           }}
         >
-          <button onClick={() => dispatch("EXTRA_SPACES_REMOVED")}>
-            Remove extra spaces
-          </button>
+          <button onClick={handleRemoveExtraSpaces}>Remove extra spaces</button>
           <textarea
             id="text-input"
             className="long-text-input"
