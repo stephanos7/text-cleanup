@@ -51,6 +51,8 @@ function App() {
   // Hooks must run at the top level of a component or custom hook. 
   // we've replaced useState with useReducer
   const [text, dispatch] = useReducer(textReducer, initialState);
+  const canUndo = text.past.length > 0;
+  const canRedo = text.future.length > 0;
 
   const handleTextChange = (event) => 
     dispatch({type: "TEXT_CHANGED", value: event.target.value});
@@ -86,6 +88,8 @@ function App() {
         >
           <button onClick={handleRemoveExtraSpaces}>Remove extra spaces</button>
           <button onClick={handleRemoveBlankLined}>Remove blank lines</button>
+          <button disabled={!canUndo}>Undo</button>
+          <button disabled={!canRedo}>Redo</button>
           <textarea
             id="text-input"
             className="long-text-input"
