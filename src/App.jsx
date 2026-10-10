@@ -4,6 +4,13 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
+const initialState = {
+  past:[],
+  present:"Hello?",
+  future:[]
+}
+
+
 // REDUCERS
 // They don't need access to anything inside App. React supplies its arguments when passed to useReducer.
 
@@ -14,25 +21,36 @@ import './App.css'
 
 // B. action-based reducer:
 const textReducer = (state, action) => {
-  if (action.type === "TEXT_CHANGED"){
-    return action.value
+  let nextText;
+  if (action.type === "TEXT_CHANGED") {
+    nextText = action.value;
   }
   if (action.type === "EXTRA_SPACES_REMOVED") {
-      return state.replace(/[ \t]+/g, " ");
+    nextText = state.present.replace(/[ \t]+/g, " ");
   }
   if (action.type === "BLANK_LINES_REMOVED") {
-    return state
+    nextText = state.present
       .split(/\r?\n/)
-      .filter(line => line.trim() !== "")
-      .join("\n");;
+      .filter((line) => line.trim() !== "")
+      .join("\n");
   }
+
+  // Don't record changes that leave the text identical.
+  if (nextText === state.present) return state;
+
+   return {
+     past: [...state.past, state.present],
+     present: nextText,
+     future: []
+   };
 };
 
 
 function App() {
+
   // Hooks must run at the top level of a component or custom hook. 
   // we've replaced useState with useReducer
-  const [text, dispatch] = useReducer(textReducer, "hello?");
+  const [text, dispatch] = useReducer(textReducer, initialState);
 
   const handleTextChange = (event) => 
     dispatch({type: "TEXT_CHANGED", value: event.target.value});
@@ -44,6 +62,8 @@ function App() {
   const handleRemoveBlankLined = () => 
     dispatch({type:"BLANK_LINES_REMOVED"})
 
+
+  console.log("text:", text);
   return (
     <>
       <section id="center">
@@ -71,7 +91,7 @@ function App() {
             className="long-text-input"
             // placeholder={"Placeholder goes here..."}
             rows={18}
-            value={text}
+            value={text.present}
             onChange={handleTextChange}
           />
         </div>
