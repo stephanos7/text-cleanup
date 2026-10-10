@@ -15,8 +15,10 @@ import './App.css'
 // B. action-based reducer:
 const textReducer = (state, action) => {
   if (action.type === "TEXT_CHANGED"){
-    console.log("Are you getting current/prev state? ", state)
     return action.value
+  }
+  if (action === "EXTRA_SPACES_REMOVED") {
+      return state.replace(/[ \t]+/g, " ");
   }
 };
 
@@ -50,7 +52,9 @@ function App() {
             alignItems: "stretch"
           }}
         >
-          <button onClick={() => dispatch("yoo")}>Remove extra spaces</button>
+          <button onClick={() => dispatch("EXTRA_SPACES_REMOVED")}>
+            Remove extra spaces
+          </button>
           <textarea
             id="text-input"
             className="long-text-input"
