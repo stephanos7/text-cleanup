@@ -4,17 +4,29 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
-// it doesn’t need access to anything inside App. React supplies its arguments when passed to useReducer.
-const textReducer = (_state, value) => {
-  return value;
+// REDUCERS
+// They don't need access to anything inside App. React supplies its arguments when passed to useReducer.
+
+// A. basic reducer:
+// const textReducer = (_state, value) => {
+//   return value;
+// };
+
+// B. action-based reducer:
+const textReducer = (state, action) => {
+  if (action.type === "TEXT_CHANGED"){
+    console.log("Are you getting current/prev state? ", state)
+    return action.value
+  }
 };
+
 
 function App() {
   // Hooks must run at the top level of a component or custom hook. we've replaced useState with useReducer
   const [text, dispatch] = useReducer(textReducer, "hello?");
 
   const handleTextChange = (event) => {
-    dispatch(event.target.value);
+    dispatch({type: "TEXT_CHANGED", value: event.target.value});
   };
 
   console.log("text state is", text);
@@ -38,6 +50,7 @@ function App() {
             alignItems: "stretch"
           }}
         >
+          <button onClick={() => dispatch("yoo")}>Remove extra spaces</button>
           <textarea
             id="text-input"
             className="long-text-input"
