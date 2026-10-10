@@ -22,6 +22,7 @@ const initialState = {
 // B. action-based reducer:
 const textReducer = (state, action) => {
   let nextText;
+
   if (action.type === "TEXT_CHANGED") {
     nextText = action.value;
   }
@@ -34,12 +35,33 @@ const textReducer = (state, action) => {
       .filter((line) => line.trim() !== "")
       .join("\n");
   }
+  if(action.type === "UNDO") {
+    if (state.past.length === 0) return state;
+
+        return {
+          past: state.past.slice(1),
+          present: state.past[0],
+          future: [state.present, ...state.future]
+        };
+    
+
+  }
+
+  if(action.type === "REDO") {
+    if (state.future.length === 0) return state;
+
+    return {
+      past: [state.present, ...state.past],
+      present: state.future[0],
+      future: state.future.slice(1)
+    };
+  }
 
   // Don't record changes that leave the text identical.
   if (nextText === state.present) return state;
 
    return {
-     past: [...state.past, state.present],
+     past: [state.present, ...state.past],
      present: nextText,
      future: []
    };
@@ -64,6 +86,19 @@ function App() {
   const handleRemoveBlankLined = () => 
     dispatch({type:"BLANK_LINES_REMOVED"})
 
+  const handleUndo = () => {
+    if (!canUndo) return;
+    dispatch({
+      type: "UNDO"
+    })
+  }
+
+  const handleRedo = () => {
+    if (!canRedo) return;
+    dispatch({
+      type: "REDO"
+    })
+  }
 
   console.log("text:", text);
   return (
@@ -88,8 +123,12 @@ function App() {
         >
           <button onClick={handleRemoveExtraSpaces}>Remove extra spaces</button>
           <button onClick={handleRemoveBlankLined}>Remove blank lines</button>
-          <button disabled={!canUndo}>Undo</button>
-          <button disabled={!canRedo}>Redo</button>
+          <button onClick={handleUndo} disabled={!canUndo}>
+            Undo
+          </button>
+          <button onClick={handleRedo} disabled={!canRedo}>
+            Redo
+          </button>
           <textarea
             id="text-input"
             className="long-text-input"
