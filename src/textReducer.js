@@ -12,6 +12,10 @@ export const textReducer = (state, action) => {
       .split(/\r?\n/)
       .filter((line) => line.trim() !== "")
       .join("\n");
+  } else if (action.type === "LINES_JOINED") {
+  nextText = state.present.replace(/\r?\n/g, " ");
+  } else if (action.type === "LOWERCASE_APPLIED") {
+  nextText = state.present.toLowerCase();
   } else if(action.type === "UNDO") {
     if (state.past.length === 0) return state;
         return {

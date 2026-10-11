@@ -51,6 +51,20 @@ function App() {
             >
               Remove blank lines
             </button>
+            <button
+              className="action-button"
+              onClick={() => dispatch({ type: "LINES_JOINED" })}
+              disabled={!text.present}
+            >
+              Join all lines
+            </button>
+            <button
+              className="action-button"
+              onClick={() => dispatch({ type: "LOWERCASE_APPLIED" })}
+              disabled={!text.present}
+            >
+              Make all lowercase
+            </button>
           </div>
           <div
             className="history-actions"
