@@ -1,25 +1,8 @@
 import { useReducer } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
 
-const initialState = {
-  past:[],
-  present:"Hello?",
-  future:[]
-}
+const initialState = { past: [], present: '', future: [] }
 
-
-// REDUCERS
-// They don't need access to anything inside App. React supplies its arguments when passed to useReducer.
-
-// A. basic reducer:
-// const textReducer = (_state, value) => {
-//   return value;
-// };
-
-// B. action-based reducer:
 const textReducer = (state, action) => {
   let nextText;
 
@@ -66,168 +49,105 @@ const textReducer = (state, action) => {
 };
 
 
-function App() {
-
-  // Hooks must run at the top level of a component or custom hook. 
-  // we've replaced useState with useReducer
-  const [text, dispatch] = useReducer(textReducer, initialState);
-  const canUndo = text.past.length > 0;
-  const canRedo = text.future.length > 0;
-
-  const handleTextChange = (event) => 
-    dispatch({type: "TEXT_CHANGED", value: event.target.value});
-  ;
-
-  const handleRemoveExtraSpaces = () => 
-    dispatch({type: "EXTRA_SPACES_REMOVED"});
-  
-  const handleRemoveBlankLined = () => 
-    dispatch({type:"BLANK_LINES_REMOVED"})
-
-  const handleUndo = () => {
-    if (!canUndo) return;
-    dispatch({
-      type: "UNDO"
-    })
-  }
-
-  const handleRedo = () => {
-    if (!canRedo) return;
-    dispatch({
-      type: "REDO"
-    })
-  }
-
-  console.log("text:", text);
+function HistoryIcon({ redo = false }) {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        {/* do things here */}
-        <label htmlFor="text-input">Text to clean</label>
-        <div
-          style={{
-            width: "100%",
-            padding: 20,
-            backgroundColor: "blue",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "stretch"
-          }}
-        >
-          <button onClick={handleRemoveExtraSpaces}>Remove extra spaces</button>
-          <button onClick={handleRemoveBlankLined}>Remove blank lines</button>
-          <button onClick={handleUndo} disabled={!canUndo}>
-            Undo
-          </button>
-          <button onClick={handleRedo} disabled={!canRedo}>
-            Redo
-          </button>
-          <button onClick={() => dispatch({type:"yolo"})} >
-            YOLO
-          </button>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <g transform={redo ? 'translate(24 0) scale(-1 1)' : undefined}>
+        <path d="M9 5 4 10l5 5" />
+        <path d="M4 10h10a6 6 0 0 1 6 6v3" />
+      </g>
+    </svg>
+  )
+}
 
+function App() {
+  const [text, dispatch] = useReducer(textReducer, initialState)
+  const wordCount = text.present.trim() ? text.present.trim().split(/\s+/).length : 0
+
+  return (
+    <main className="app">
+      <header className="page-header">
+        <div className="heading-row">
+          <span className="app-mark" aria-hidden="true">
+            T<span>.</span>
+          </span>
+          <h1>Text cleaner</h1>
+        </div>
+        <p>
+          A little less clutter. A little more clarity. Just your text.
+          Everything stays in your browser.
+        </p>
+      </header>
+
+      <section className="editor" aria-label="Text editor">
+        <div className="editor-toolbar">
+          <div className="clean-actions" role="group" aria-label="Clean text">
+            <button
+              className="action-button"
+              onClick={() => dispatch({ type: "EXTRA_SPACES_REMOVED" })}
+              disabled={!text.present}
+            >
+              Remove extra spaces
+            </button>
+            <button
+              className="action-button"
+              onClick={() => dispatch({ type: "BLANK_LINES_REMOVED" })}
+              disabled={!text.present}
+            >
+              Remove blank lines
+            </button>
+          </div>
+          <div
+            className="history-actions"
+            role="group"
+            aria-label="Text history"
+          >
+            <button
+              className="history-button"
+              onClick={() => dispatch({ type: "UNDO" })}
+              disabled={!text.past.length}
+              aria-label="Undo"
+              title="Undo"
+            >
+              <HistoryIcon />
+              <span>Undo</span>
+            </button>
+            <button
+              className="history-button"
+              onClick={() => dispatch({ type: "REDO" })}
+              disabled={!text.future.length}
+              aria-label="Redo"
+              title="Redo"
+            >
+              <HistoryIcon redo />
+              <span>Redo</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="editor-body">
+          <label htmlFor="text-input">Your text</label>
           <textarea
             id="text-input"
-            className="long-text-input"
-            // placeholder={"Placeholder goes here..."}
-            rows={18}
+            placeholder="Paste or type your text here…"
             value={text.present}
-            onChange={handleTextChange}
+            onChange={(event) =>
+              dispatch({ type: "TEXT_CHANGED", value: event.target.value })
+            }
+            spellCheck="false"
           />
         </div>
+        <footer className="editor-footer">
+          <span>
+            {wordCount.toLocaleString()} {wordCount === 1 ? "word" : "words"}
+          </span>
+          <span>
+            {text.present.length.toLocaleString()}{" "}
+            {text.present.length === 1 ? "character" : "characters"}
+          </span>
+        </footer>
       </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </main>
   );
 }
 
