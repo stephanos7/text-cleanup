@@ -13,22 +13,28 @@ function HistoryIcon({ redo = false }) {
 }     
 
 export default function StateTextCleaner() {
-  const [text, setText] = useState("Starter text")
+  const [presentText, setPresentText] = useState("Starter text")
+  const [pastText, setPastText] = useState([]);
+  const [futureText, setFutureText] = useState([]);
+  const canUndo = pastText.length > 0;
+  const canRedo = futureText.length > 0;
   // const wordCount = text.present.trim()
   //   ? text.present.trim().split(/\s+/).length
   //   : 0;
 
-  const handleUpdateText = (event) => {
-    setText(event.target.value)
+  const handleUpdatePresentText = (event) => {
+    setPresentText(event.target.value)
   }
 
   const handleRemoveExtraSpaces = () => {
-    setText(text.replace(/[ \t]+/g, " "))
+    setPresentText(presentText.replace(/[ \t]+/g, " "));
+    const newPastText = [presentText,...pastText ];
+    setPastText(newPastText);
   }
 
   const handleRemoveBlankLines = () => {
-    setText(
-      text
+    setPresentText(
+      presentText
         .split(/\r?\n/)
         .filter((line) => line.trim() !== "")
         .join("\n")
@@ -36,12 +42,30 @@ export default function StateTextCleaner() {
   }
 
   const handleJoinAllLines = () => {
-    setText(text.replace(/\r?\n/g, " "))
+    setPresentText(presentText.replace(/\r?\n/g, " "));
   }
 
   const handleMakeLowercase = () => {
-    setText(text.toLowerCase())
+    setPresentText(presentText.toLowerCase());
   }   
+
+  const handleUndo = () => {
+    if (!canUndo) return;
+    const previousText = pastText[0];
+    const newPastText = pastText.slice(1);
+    setPresentText(previousText);
+    setPastText(newPastText);
+    setFutureText([presentText, ...futureText]);
+  }
+
+  const handleRedo = () => {
+    if (!canRedo) return;
+    const nextText = futureText[0];
+    const newFutureText = futureText.slice(1);
+    setPresentText(nextText);
+    setFutureText(newFutureText);
+    setPastText([...pastText, presentText]);
+  } 
 
   return (
     <div className="app">
@@ -64,28 +88,28 @@ export default function StateTextCleaner() {
             <button
               className="action-button"
               onClick={handleRemoveExtraSpaces}
-              disabled={!text}
+              disabled={!presentText}
             >
               Remove extra spaces
             </button>
             <button
               className="action-button"
               onClick={handleRemoveBlankLines}
-              disabled={!text}
+              disabled={!presentText}
             >
               Remove blank lines
             </button>
             <button
               className="action-button"
               onClick={handleJoinAllLines}
-              disabled={!text}
+              disabled={!presentText}
             >
               Join all lines
             </button>
             <button
               className="action-button"
               onClick={handleMakeLowercase}
-              disabled={!text}
+              disabled={!presentText}
             >
               Make all lowercase
             </button>
@@ -97,8 +121,8 @@ export default function StateTextCleaner() {
           >
             <button
               className="history-button"
-              onClick={() => {}}
-              // disabled={!text.past.length}
+              onClick={handleUndo}
+              disabled={!canUndo}
               aria-label="Undo"
               title="Undo"
             >
@@ -107,8 +131,8 @@ export default function StateTextCleaner() {
             </button>
             <button
               className="history-button"
-              onClick={() => {}}
-              // disabled={!text.future.length}
+              onClick={handleRedo}
+              disabled={!canRedo}
               aria-label="Redo"
               title="Redo"
             >
@@ -123,8 +147,8 @@ export default function StateTextCleaner() {
           <textarea
             id="text-input"
             placeholder="Paste or type your text here…"
-            value={text}
-            onChange={handleUpdateText}
+            value={presentText}
+            onChange={handleUpdatePresentText}
             spellCheck="false"
           />
         </div>
