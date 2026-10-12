@@ -1,30 +1,56 @@
 import { useState } from 'react'
 import Logo from './Logo'
 import TextStats from './TextStats'
+import TextLimitFeedback from './TextLimitFeedback'
+import { HISTORY_LIMIT, MAX_TEXT_LENGTH } from './textCleanerConfig'
+import {
+  pasteExceedsLimit,
+  PASTE_LENGTH_ERROR,
+  TEXT_LENGTH_ERROR,
+} from './textLimits'
 import './App.css'
 
 export default function StateTextCleaner() {
-  const [presentText, setPresentText] = useState('Starter text')
+  const [presentText, setPresentText] = useState('')
   const [pastText, setPastText] = useState([])
   const [futureText, setFutureText] = useState([])
+  const [error, setError] = useState(null)
   const canUndo = pastText.length > 0
   const canRedo = futureText.length > 0
 
-  const handleUpdatePresentText = (event) => {
-    const nextText = event.target.value
+  const updateText = (nextText) => {
+    if (nextText.length > MAX_TEXT_LENGTH) {
+      setError(TEXT_LENGTH_ERROR)
+      return
+    }
+    setError(null)
     if (nextText === presentText) return
     setPresentText(nextText)
-    setPastText([presentText, ...pastText])
+    setPastText([presentText, ...pastText].slice(0, HISTORY_LIMIT))
     setFutureText([])
+  }
+
+  const handleUpdatePresentText = (event) => {
+    updateText(event.target.value)
+  }
+
+  const handlePaste = (event) => {
+    if (
+      pasteExceedsLimit(
+        event.currentTarget,
+        event.clipboardData.getData('text/plain'),
+      )
+    ) {
+      event.preventDefault()
+      setError(PASTE_LENGTH_ERROR)
+      return
+    }
+    setError(null)
   }
 
   const handleRemoveExtraSpaces = () => {
     const nextText = presentText.replace(/[ \t]+/g, ' ')
-    if (nextText === presentText) return
-    setPresentText(nextText)
-    const newPastText = [presentText, ...pastText]
-    setPastText(newPastText)
-    setFutureText([])
+    updateText(nextText)
   }
 
   const handleRemoveBlankLines = () => {
@@ -32,33 +58,22 @@ export default function StateTextCleaner() {
       .split(/\r?\n/)
       .filter((line) => line.trim() !== '')
       .join('\n')
-    if (nextText === presentText) return
-    setPresentText(nextText)
-    const newPastText = [presentText, ...pastText]
-    setPastText(newPastText)
-    setFutureText([])
+    updateText(nextText)
   }
 
   const handleJoinAllLines = () => {
     const nextText = presentText.replace(/\r?\n/g, ' ')
-    if (nextText === presentText) return
-    setPresentText(nextText)
-    const newPastText = [presentText, ...pastText]
-    setPastText(newPastText)
-    setFutureText([])
+    updateText(nextText)
   }
 
   const handleMakeLowercase = () => {
     const nextText = presentText.toLowerCase()
-    if (nextText === presentText) return
-    setPresentText(nextText)
-    const newPastText = [presentText, ...pastText]
-    setPastText(newPastText)
-    setFutureText([])
+    updateText(nextText)
   }
 
   const handleUndo = () => {
     if (!canUndo) return
+    setError(null)
     const previousText = pastText[0]
     const newPastText = pastText.slice(1)
     setPresentText(previousText)
@@ -68,6 +83,7 @@ export default function StateTextCleaner() {
 
   const handleRedo = () => {
     if (!canRedo) return
+    setError(null)
     const nextText = futureText[0]
     const newFutureText = futureText.slice(1)
     setPresentText(nextText)
@@ -152,12 +168,16 @@ export default function StateTextCleaner() {
         </div>
 
         <div className="editor-body">
-          <label htmlFor="text-input">Your text</label>
+          <TextLimitFeedback error={error} />
           <textarea
             id="text-input"
             placeholder="Paste or type your text here…"
             value={presentText}
             onChange={handleUpdatePresentText}
+            onPaste={handlePaste}
+            maxLength={MAX_TEXT_LENGTH}
+            aria-invalid={Boolean(error)}
+            aria-describedby="text-limit-help"
             spellCheck="false"
           />
         </div>

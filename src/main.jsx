@@ -9,7 +9,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary
       fallbackRender={({ resetErrorBoundary }) => (
-        <div role="alert">
+        <div className="app-error" role="alert">
           <p>Something went wrong with the text editor.</p>
           <p>Restarting will clear your text and undo history.</p>
           <button onClick={resetErrorBoundary}>Restart editor</button>

@@ -1,11 +1,28 @@
 import { useReducer } from 'react'
 import Logo from './Logo'
 import TextStats from './TextStats'
+import TextLimitFeedback from './TextLimitFeedback'
+import { MAX_TEXT_LENGTH } from './textCleanerConfig'
+import { pasteExceedsLimit, PASTE_LENGTH_ERROR } from './textLimits'
 import { initialState, textReducer } from './textReducer'
 import './App.css'
 
 export default function ReducerTextCleaner() {
   const [text, dispatch] = useReducer(textReducer, initialState)
+
+  const handlePaste = (event) => {
+    if (
+      pasteExceedsLimit(
+        event.currentTarget,
+        event.clipboardData.getData('text/plain'),
+      )
+    ) {
+      event.preventDefault()
+      dispatch({ type: 'INPUT_REJECTED', error: PASTE_LENGTH_ERROR })
+      return
+    }
+    dispatch({ type: 'CLEAR_ERROR' })
+  }
 
   return (
     <div className="app">
@@ -83,7 +100,7 @@ export default function ReducerTextCleaner() {
         </div>
 
         <div className="editor-body">
-          <label htmlFor="text-input">Your text</label>
+          <TextLimitFeedback error={text.error} />
           <textarea
             id="text-input"
             placeholder="Paste or type your text here…"
@@ -91,6 +108,10 @@ export default function ReducerTextCleaner() {
             onChange={(event) =>
               dispatch({ type: 'TEXT_CHANGED', value: event.target.value })
             }
+            onPaste={handlePaste}
+            maxLength={MAX_TEXT_LENGTH}
+            aria-invalid={Boolean(text.error)}
+            aria-describedby="text-limit-help"
             spellCheck="false"
           />
         </div>

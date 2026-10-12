@@ -1,0 +1,44 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - generic [aria-hidden] [ref=e8]:
+            - text: T
+            - generic [ref=e9]: .
+          - heading "Text cleaner" [level=1] [ref=e10]
+        - paragraph [ref=e11]: A little less clutter. A little more clarity. Just your text. Everything stays in your browser.
+      - region "Text editor" [ref=e12]:
+        - generic [ref=e13]:
+          - group "Clean text" [ref=e14]:
+            - button "Remove extra spaces" [disabled] [ref=e15]
+            - button "Remove blank lines" [disabled] [ref=e16]
+            - button "Join all lines" [disabled] [ref=e17]
+            - button "Make all lowercase" [disabled] [ref=e18]
+          - group "Text history" [ref=e19]:
+            - button "Undo" [disabled] [ref=e20]
+            - button "Redo" [disabled] [ref=e26]
+        - generic [ref=e32]:
+          - generic [ref=e33]: Your text
+          - textbox "Your text" [ref=e34]:
+            - /placeholder: Paste or type your text here…
+          - paragraph [ref=e35]: Maximum 100 characters. Some emoji count as multiple characters.
+        - generic [ref=e36]:
+          - generic [ref=e37]: 0 words
+          - generic [ref=e38]: 0 / 100 characters
+    - button "View implementation" [ref=e40] [cursor=pointer]:
+      - generic [aria-hidden] [ref=e41]: </>
+      - text: View implementation
+  - contentinfo [ref=e42]:
+    - generic [ref=e43]:
+      - paragraph [ref=e44]: Clean up extra spaces and blank lines, join lines, or convert text to lowercase. Undo and redo changes, with everything staying in your browser.
+      - navigation "Project links" [ref=e45]:
+        - link "Text cleaner" [ref=e46] [cursor=pointer]:
+          - /url: /
+        - generic [aria-hidden] [ref=e47]: ·
+        - link "Implementation demo" [ref=e48] [cursor=pointer]:
+          - /url: /state
+        - generic [aria-hidden] [ref=e49]: ·
+        - link "GitHub (opens in a new tab)" [ref=e50] [cursor=pointer]:
+          - /url: https://github.com/stephanos7/text-cleanup
+          - text: GitHub ↗

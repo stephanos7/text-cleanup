@@ -22,11 +22,20 @@ npm run dev
 ## Checks and build
 
 ```sh
+npm test
 npm run format:check
 npm run lint
 npm run build
 npm run preview
 ```
+
+## History and text limits
+
+Both implementations read `HISTORY_LIMIT` and `MAX_TEXT_LENGTH` from `src/textCleanerConfig.js`. The defaults are 15 history transitions and 100 UTF-16 units of text. The text limit starts small for testing; change the constants and reload the editor to test other values.
+
+Undo and redo share the history budget: five undos from a full history leave ten undo steps and five redo steps. A new edit clears redo, retains the newest undo entries, and discards older entries beyond the limit. Each input change remains its own undo step.
+
+Oversized pastes are rejected in full, accounting for selected text being replaced. Oversized cleaning results are also rejected. Neither rejection changes text or history. The displayed character count uses JavaScript string length, so some emoji count as multiple characters.
 
 ## Formatting
 

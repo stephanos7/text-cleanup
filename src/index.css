@@ -75,7 +75,7 @@ p {
   min-height: 100svh;
 }
 
-[role='alert'] {
+.app-error {
   max-width: 40rem;
   margin: 3rem auto;
   padding: 1.5rem;

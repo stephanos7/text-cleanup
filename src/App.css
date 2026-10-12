@@ -185,9 +185,18 @@
   padding: 24px 20px 8px;
 }
 
+.editor-field-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 14px;
+}
+
 .editor-body label {
   display: block;
-  margin-bottom: 14px;
+  margin: 0;
   font-size: 12px;
   font-weight: 600;
   color: var(--text-muted);
@@ -218,6 +227,20 @@ textarea::placeholder {
 textarea:focus-visible {
   outline: 2px solid #737373;
   outline-offset: 2px;
+}
+
+.text-limit-help {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.text-limit-help {
+  color: var(--text-muted);
+}
+
+.text-limit-help--error {
+  color: #a52a2a;
 }
 
 .editor-footer {
