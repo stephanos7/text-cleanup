@@ -18,9 +18,7 @@ export default function StateTextCleaner() {
   const [futureText, setFutureText] = useState([]);
   const canUndo = pastText.length > 0;
   const canRedo = futureText.length > 0;
-  // const wordCount = text.present.trim()
-  //   ? text.present.trim().split(/\s+/).length
-  //   : 0;
+  const wordCount = presentText.trim() ? presentText.trim().split(/\s+/).length : 0;
 
   const handleUpdatePresentText = (event) => {
     setPresentText(event.target.value)
@@ -38,15 +36,21 @@ export default function StateTextCleaner() {
         .split(/\r?\n/)
         .filter((line) => line.trim() !== "")
         .join("\n")
-    )
+    );
+      const newPastText = [presentText, ...pastText];
+      setPastText(newPastText);
   }
 
   const handleJoinAllLines = () => {
     setPresentText(presentText.replace(/\r?\n/g, " "));
+    const newPastText = [presentText, ...pastText];
+    setPastText(newPastText);
   }
 
   const handleMakeLowercase = () => {
     setPresentText(presentText.toLowerCase());
+    const newPastText = [presentText, ...pastText];
+    setPastText(newPastText);
   }   
 
   const handleUndo = () => {
@@ -154,11 +158,11 @@ export default function StateTextCleaner() {
         </div>
         <footer className="editor-footer">
           <span>
-            {/* {wordCount.toLocaleString()} {wordCount === 1 ? "word" : "words"} */}
+            {wordCount.toLocaleString()} {wordCount === 1 ? "word" : "words"} 
           </span>
           <span>
-            {/* {text.present.length.toLocaleString()}{" "}
-            {text.present.length === 1 ? "character" : "characters"} */}
+             {presentText.length.toLocaleString()}{" "}
+            {presentText.length === 1 ? "character" : "characters"}  
           </span>
         </footer>
       </section>
