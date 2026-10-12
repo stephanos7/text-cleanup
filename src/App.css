@@ -22,14 +22,14 @@
   width: 40px;
   height: 40px;
   flex-shrink: 0;
-  border: 1px solid #dce4dc;
+  border: 1px solid var(--mark-border);
   border-radius: 12px;
-  background: #edf2eb;
+  background: var(--mark-bg);
   font: 600 25px Georgia, serif;
 }
 
 .app-mark span {
-  color: #5b8965;
+  color: var(--accent);
 }
 
 .page-header h1 {
@@ -41,17 +41,17 @@
 }
 
 .page-header p {
-  color: #6b756e;
+  color: var(--text-muted);
   font-size: 15px;
   line-height: 1.6;
 }
 
 .editor {
   overflow: hidden;
-  border: 1px solid #dce2da;
+  border: 1px solid var(--editor-border);
   border-radius: 16px;
   background: #fff;
-  box-shadow: 0 4px 20px #253c2d04;
+  box-shadow: 0 4px 20px var(--editor-shadow);
 }
 
 .editor-toolbar {
@@ -60,8 +60,8 @@
   grid-auto-rows: 1fr;
   gap: 12px;
   padding: 12px;
-  border-bottom: 1px solid #e8ece5;
-  background: #fcfdfa;
+  border-bottom: 1px solid var(--toolbar-border);
+  background: var(--toolbar-bg);
 }
 
 .clean-actions,
@@ -88,27 +88,27 @@
 .action-button {
   font-weight: 600;
   padding: 10px 12px;
-  border: 1px solid #b4c8af;
-  background: #e2ecdc;
+  border: 1px solid var(--action-border);
+  background: var(--action-bg);
   color: #333333;
 }
 
 .action-button:hover:not(:disabled) {
-  background: #d4e2cc;
-  border-color: #9eb396;
+  background: var(--action-hover-bg);
+  border-color: var(--action-hover-border);
 }
 
 .action-button:disabled {
-  border-color: #d8e3d5;
+  border-color: var(--action-disabled-border);
   color: #666666;
-  background: #f2f5ef;
+  background: var(--action-disabled-bg);
 }
 
 .history-button {
   gap: 7px;
-  border: 1px solid #dce2da;
+  border: 1px solid var(--editor-border);
   background: transparent;
-  color: #536359;
+  color: var(--history-text);
 }
 
 .history-button svg {
@@ -116,11 +116,11 @@
 }
 
 .history-button:hover:not(:disabled) {
-  background: #edf1e9;
+  background: var(--history-hover-bg);
 }
 
 .history-button:disabled {
-  color: #a9b1a7;
+  color: var(--history-disabled-text);
 }
 
 .editor-body {
@@ -132,7 +132,7 @@
   margin-bottom: 14px;
   font-size: 12px;
   font-weight: 600;
-  color: #6b756e;
+  color: var(--text-muted);
 }
 
 textarea {
@@ -147,14 +147,14 @@ textarea {
   outline-offset: 2px;
   border-radius: 4px;
   background: transparent;
-  color: #283b33;
+  color: var(--text);
   font-size: 16px;
   line-height: 1.8;
   resize: vertical;
 }
 
 textarea::placeholder {
-  color: #939c94;
+  color: var(--placeholder-text);
 }
 
 textarea:focus-visible {
@@ -168,14 +168,14 @@ textarea:focus-visible {
   gap: 16px;
   padding: 16px 20px;
   font-size: 12px;
-  color: #798277;
+  color: var(--footer-text);
   font-variant-numeric: tabular-nums;
 }
 
 .privacy-note {
   margin-top: 20px;
   text-align: center;
-  color: #7a837a;
+  color: var(--privacy-text);
   font-size: 12px;
   line-height: 1.6;
 }

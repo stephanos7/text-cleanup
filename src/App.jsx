@@ -1,13 +1,14 @@
-import { Navigate, NavLink, Route, Routes } from 'react-router'
+import { Navigate, NavLink, Route, Routes, useMatch } from 'react-router'
 import ReducerTextCleaner from './ReducerTextCleaner'
 import StateTextCleaner from './StateTextCleaner'
 import './App.css'
 
 
 function App() {
+  const isStateRoute = useMatch('/state') !== null
 
   return (
-    <>
+    <div className="page-shell" data-theme={isStateRoute ? 'purple' : undefined}>
       <nav aria-label="Implementation">
         <NavLink to="/reducer">useReducer version</NavLink>
         {" | "}
@@ -21,7 +22,7 @@ function App() {
           <Route path="*" element={<p>Page not found.</p>} />
         </Routes>
       </main>
-    </>
+    </div>
   );
 }
 
