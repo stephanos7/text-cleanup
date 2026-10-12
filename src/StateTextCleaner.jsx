@@ -21,36 +21,50 @@ export default function StateTextCleaner() {
   const wordCount = presentText.trim() ? presentText.trim().split(/\s+/).length : 0;
 
   const handleUpdatePresentText = (event) => {
-    setPresentText(event.target.value)
+    const nextText = event.target.value;
+    if (nextText === presentText) return;
+    setPresentText(nextText);
+    setPastText([presentText, ...pastText]);
+    setFutureText([]);
   }
 
   const handleRemoveExtraSpaces = () => {
-    setPresentText(presentText.replace(/[ \t]+/g, " "));
+    const nextText = presentText.replace(/[ \t]+/g, " ");
+    if (nextText === presentText) return;
+    setPresentText(nextText);
     const newPastText = [presentText,...pastText ];
     setPastText(newPastText);
+    setFutureText([]);
   }
 
   const handleRemoveBlankLines = () => {
-    setPresentText(
-      presentText
-        .split(/\r?\n/)
-        .filter((line) => line.trim() !== "")
-        .join("\n")
-    );
-      const newPastText = [presentText, ...pastText];
-      setPastText(newPastText);
+    const nextText = presentText
+      .split(/\r?\n/)
+      .filter((line) => line.trim() !== "")
+      .join("\n");
+    if (nextText === presentText) return;
+    setPresentText(nextText);
+    const newPastText = [presentText, ...pastText];
+    setPastText(newPastText);
+    setFutureText([]);
   }
 
   const handleJoinAllLines = () => {
-    setPresentText(presentText.replace(/\r?\n/g, " "));
+    const nextText = presentText.replace(/\r?\n/g, " ");
+    if (nextText === presentText) return;
+    setPresentText(nextText);
     const newPastText = [presentText, ...pastText];
     setPastText(newPastText);
+    setFutureText([]);
   }
 
   const handleMakeLowercase = () => {
-    setPresentText(presentText.toLowerCase());
+    const nextText = presentText.toLowerCase();
+    if (nextText === presentText) return;
+    setPresentText(nextText);
     const newPastText = [presentText, ...pastText];
     setPastText(newPastText);
+    setFutureText([]);
   }   
 
   const handleUndo = () => {
@@ -68,7 +82,7 @@ export default function StateTextCleaner() {
     const newFutureText = futureText.slice(1);
     setPresentText(nextText);
     setFutureText(newFutureText);
-    setPastText([...pastText, presentText]);
+    setPastText([presentText,...pastText]);
   } 
 
   return (
@@ -161,7 +175,7 @@ export default function StateTextCleaner() {
             {wordCount.toLocaleString()} {wordCount === 1 ? "word" : "words"} 
           </span>
           <span>
-             {presentText.length.toLocaleString()}{" "}
+            {presentText.length.toLocaleString()}{" "}
             {presentText.length === 1 ? "character" : "characters"}  
           </span>
         </footer>
