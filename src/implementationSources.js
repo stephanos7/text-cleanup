@@ -13,7 +13,10 @@ export const implementationSources = {
   state: {
     title: 'React useState',
     files: [
-      { name: 'StateTextCleaner.jsx', description: 'The UI, state and update handlers in one component.', code: statePage },
+      {
+        name: 'StateTextCleaner.jsx',
+        code: statePage,
+      },
     ],
   },
 }

@@ -1,89 +1,79 @@
-import {useState} from "react"
+import { useState } from 'react'
+import Logo from './Logo'
+import TextStats from './TextStats'
 import './App.css'
 
-function HistoryIcon({ redo = false }) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <g transform={redo ? 'translate(24 0) scale(-1 1)' : undefined}>
-        <path d="M9 5 4 10l5 5" /> 
-        <path d="M4 10h10a6 6 0 0 1 6 6v3" />
-      </g>
-    </svg>
-  )
-}     
-
 export default function StateTextCleaner() {
-  const [presentText, setPresentText] = useState("Starter text")
-  const [pastText, setPastText] = useState([]);
-  const [futureText, setFutureText] = useState([]);
-  const canUndo = pastText.length > 0;
-  const canRedo = futureText.length > 0;
-  const wordCount = presentText.trim() ? presentText.trim().split(/\s+/).length : 0;
+  const [presentText, setPresentText] = useState('Starter text')
+  const [pastText, setPastText] = useState([])
+  const [futureText, setFutureText] = useState([])
+  const canUndo = pastText.length > 0
+  const canRedo = futureText.length > 0
 
   const handleUpdatePresentText = (event) => {
-    const nextText = event.target.value;
-    if (nextText === presentText) return;
-    setPresentText(nextText);
-    setPastText([presentText, ...pastText]);
-    setFutureText([]);
+    const nextText = event.target.value
+    if (nextText === presentText) return
+    setPresentText(nextText)
+    setPastText([presentText, ...pastText])
+    setFutureText([])
   }
 
   const handleRemoveExtraSpaces = () => {
-    const nextText = presentText.replace(/[ \t]+/g, " ");
-    if (nextText === presentText) return;
-    setPresentText(nextText);
-    const newPastText = [presentText,...pastText ];
-    setPastText(newPastText);
-    setFutureText([]);
+    const nextText = presentText.replace(/[ \t]+/g, ' ')
+    if (nextText === presentText) return
+    setPresentText(nextText)
+    const newPastText = [presentText, ...pastText]
+    setPastText(newPastText)
+    setFutureText([])
   }
 
   const handleRemoveBlankLines = () => {
     const nextText = presentText
       .split(/\r?\n/)
-      .filter((line) => line.trim() !== "")
-      .join("\n");
-    if (nextText === presentText) return;
-    setPresentText(nextText);
-    const newPastText = [presentText, ...pastText];
-    setPastText(newPastText);
-    setFutureText([]);
+      .filter((line) => line.trim() !== '')
+      .join('\n')
+    if (nextText === presentText) return
+    setPresentText(nextText)
+    const newPastText = [presentText, ...pastText]
+    setPastText(newPastText)
+    setFutureText([])
   }
 
   const handleJoinAllLines = () => {
-    const nextText = presentText.replace(/\r?\n/g, " ");
-    if (nextText === presentText) return;
-    setPresentText(nextText);
-    const newPastText = [presentText, ...pastText];
-    setPastText(newPastText);
-    setFutureText([]);
+    const nextText = presentText.replace(/\r?\n/g, ' ')
+    if (nextText === presentText) return
+    setPresentText(nextText)
+    const newPastText = [presentText, ...pastText]
+    setPastText(newPastText)
+    setFutureText([])
   }
 
   const handleMakeLowercase = () => {
-    const nextText = presentText.toLowerCase();
-    if (nextText === presentText) return;
-    setPresentText(nextText);
-    const newPastText = [presentText, ...pastText];
-    setPastText(newPastText);
-    setFutureText([]);
-  }   
+    const nextText = presentText.toLowerCase()
+    if (nextText === presentText) return
+    setPresentText(nextText)
+    const newPastText = [presentText, ...pastText]
+    setPastText(newPastText)
+    setFutureText([])
+  }
 
   const handleUndo = () => {
-    if (!canUndo) return;
-    const previousText = pastText[0];
-    const newPastText = pastText.slice(1);
-    setPresentText(previousText);
-    setPastText(newPastText);
-    setFutureText([presentText, ...futureText]);
+    if (!canUndo) return
+    const previousText = pastText[0]
+    const newPastText = pastText.slice(1)
+    setPresentText(previousText)
+    setPastText(newPastText)
+    setFutureText([presentText, ...futureText])
   }
 
   const handleRedo = () => {
-    if (!canRedo) return;
-    const nextText = futureText[0];
-    const newFutureText = futureText.slice(1);
-    setPresentText(nextText);
-    setFutureText(newFutureText);
-    setPastText([presentText,...pastText]);
-  } 
+    if (!canRedo) return
+    const nextText = futureText[0]
+    const newFutureText = futureText.slice(1)
+    setPresentText(nextText)
+    setFutureText(newFutureText)
+    setPastText([presentText, ...pastText])
+  }
 
   return (
     <div className="app">
@@ -145,7 +135,7 @@ export default function StateTextCleaner() {
               aria-label="Undo"
               title="Undo"
             >
-              <HistoryIcon />
+              <Logo />
               <span>Undo</span>
             </button>
             <button
@@ -155,7 +145,7 @@ export default function StateTextCleaner() {
               aria-label="Redo"
               title="Redo"
             >
-              <HistoryIcon redo />
+              <Logo redo />
               <span>Redo</span>
             </button>
           </div>
@@ -171,16 +161,8 @@ export default function StateTextCleaner() {
             spellCheck="false"
           />
         </div>
-        <footer className="editor-footer">
-          <span>
-            {wordCount.toLocaleString()} {wordCount === 1 ? "word" : "words"} 
-          </span>
-          <span>
-            {presentText.length.toLocaleString()}{" "}
-            {presentText.length === 1 ? "character" : "characters"}  
-          </span>
-        </footer>
+        <TextStats text={presentText} />
       </section>
     </div>
-  );
+  )
 }

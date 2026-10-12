@@ -7,11 +7,18 @@ import './App.css'
 
 function scrollToTop(event) {
   if (
-    event.defaultPrevented || event.button !== 0 ||
-    event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
-  ) return
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  )
+    return
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches
   window.scrollTo({
     top: 0,
     left: 0,
@@ -24,7 +31,9 @@ function App() {
   const isHomeRoute = useMatch('/') !== null
 
   useEffect(() => {
-    const existingRobots = document.head.querySelector('meta[data-route-robots]')
+    const existingRobots = document.head.querySelector(
+      'meta[data-route-robots]',
+    )
     if (isHomeRoute) {
       existingRobots?.remove()
       return
@@ -40,7 +49,10 @@ function App() {
   }, [isHomeRoute])
 
   return (
-    <div className="page-shell" data-theme={isStateRoute ? 'purple' : undefined}>
+    <div
+      className="page-shell"
+      data-theme={isStateRoute ? 'purple' : undefined}
+    >
       <main>
         <Routes>
           <Route path="/" element={<ReducerTextCleaner />} />
@@ -57,11 +69,14 @@ function App() {
       <footer className="site-footer">
         <div data-nosnippet>
           <p>
-            Clean up extra spaces and blank lines, join lines, or convert text to
-            lowercase. Undo and redo changes, with everything staying in your browser.
+            Clean up extra spaces and blank lines, join lines, or convert text
+            to lowercase. Undo and redo changes, with everything staying in your
+            browser.
           </p>
           <nav aria-label="Project links">
-            <NavLink to="/" end onClick={scrollToTop}>Text cleaner</NavLink>
+            <NavLink to="/" end onClick={scrollToTop}>
+              Text cleaner
+            </NavLink>
             <span aria-hidden="true">·</span>
             <Link
               to="/state"
@@ -83,7 +98,7 @@ function App() {
         </div>
       </footer>
     </div>
-  );
+  )
 }
 
 export default App

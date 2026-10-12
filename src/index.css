@@ -28,7 +28,12 @@
   --footer-text: #798277;
   --privacy-text: #7a837a;
 
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   color: var(--text);
   background: var(--page-bg);
   font-synthesis: none;
@@ -70,14 +75,14 @@ p {
   min-height: 100svh;
 }
 
-[role="alert"] {
+[role='alert'] {
   max-width: 40rem;
   margin: 3rem auto;
   padding: 1.5rem;
   line-height: 1.7;
 }
 
-[data-theme="purple"] {
+[data-theme='purple'] {
   --page-bg: #f8f5fa;
   --text: #372b40;
   --text-muted: #746b7a;

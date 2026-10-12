@@ -24,12 +24,28 @@ function SourceFile({ file, children }) {
     <>
       <div className="source-toolbar">
         {children}
-        <button className="source-button" onClick={copyFile}>Copy</button>
+        <button className="source-button" onClick={copyFile}>
+          Copy
+        </button>
       </div>
-      {file.description && <p className="source-description" id="source-description">{file.description}</p>}
-      <p className="copy-status" role="status">{copyStatus}</p>
-      <pre className="source-code" tabIndex={0} aria-label={`${file.name} source code`} aria-describedby={file.description ? 'source-description' : undefined}>
-        <code className={`language-${language}`} dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+      {file.description && (
+        <p className="source-description" id="source-description">
+          {file.description}
+        </p>
+      )}
+      <p className="copy-status" role="status">
+        {copyStatus}
+      </p>
+      <pre
+        className="source-code"
+        tabIndex={0}
+        aria-label={`${file.name} source code`}
+        aria-describedby={file.description ? 'source-description' : undefined}
+      >
+        <code
+          className={`language-${language}`}
+          dangerouslySetInnerHTML={{ __html: highlightedCode }}
+        />
       </pre>
     </>
   )
@@ -61,7 +77,12 @@ export default function ImplementationDrawer({ implementation }) {
 
   return (
     <div className="implementation-entry" data-nosnippet>
-      <button ref={triggerRef} className="implementation-trigger" aria-haspopup="dialog" onClick={() => setIsOpen(true)}>
+      <button
+        ref={triggerRef}
+        className="implementation-trigger"
+        aria-haspopup="dialog"
+        onClick={() => setIsOpen(true)}
+      >
         <span aria-hidden="true">&lt;/&gt;</span> View implementation
       </button>
       <dialog
@@ -71,7 +92,9 @@ export default function ImplementationDrawer({ implementation }) {
         onCancel={() => setIsOpen(false)}
         onKeyDown={(event) => {
           if (event.key !== 'Tab') return
-          const controls = dialogRef.current.querySelectorAll('button, select, [tabindex="0"]')
+          const controls = dialogRef.current.querySelectorAll(
+            'button, select, [tabindex="0"]',
+          )
           const first = controls[0]
           const last = controls[controls.length - 1]
           if (event.shiftKey && document.activeElement === first) {
@@ -88,20 +111,41 @@ export default function ImplementationDrawer({ implementation }) {
             <p className="drawer-eyebrow">Implementation</p>
             <h2 id="implementation-title">{source.title}</h2>
           </div>
-          <button ref={closeRef} className="source-button drawer-close" onClick={() => setIsOpen(false)} aria-label="Close implementation"><span aria-hidden="true">X</span></button>
+          <button
+            ref={closeRef}
+            className="source-button drawer-close"
+            onClick={() => setIsOpen(false)}
+            aria-label="Close implementation"
+          >
+            <span aria-hidden="true">X</span>
+          </button>
         </header>
-        {isOpen && <SourceFile key={file.name} file={file}>
-        <div className="source-picker">
-          {source.files.length > 1 ? (
-            <>
-              <label htmlFor="implementation-file">File</label>
-              <select id="implementation-file" value={selectedIndex} onChange={(event) => setSelectedIndex(Number(event.target.value))}>
-                {source.files.map((entry, index) => <option key={entry.name} value={index}>{entry.name}</option>)}
-              </select>
-            </>
-          ) : <span className="source-filename">{file.name}</span>}
-        </div>
-        </SourceFile>}
+        {isOpen && (
+          <SourceFile key={file.name} file={file}>
+            <div className="source-picker">
+              {source.files.length > 1 ? (
+                <>
+                  <label htmlFor="implementation-file">File</label>
+                  <select
+                    id="implementation-file"
+                    value={selectedIndex}
+                    onChange={(event) =>
+                      setSelectedIndex(Number(event.target.value))
+                    }
+                  >
+                    {source.files.map((entry, index) => (
+                      <option key={entry.name} value={index}>
+                        {entry.name}
+                      </option>
+                    ))}
+                  </select>
+                </>
+              ) : (
+                <span className="source-filename">{file.name}</span>
+              )}
+            </div>
+          </SourceFile>
+        )}
       </dialog>
     </div>
   )

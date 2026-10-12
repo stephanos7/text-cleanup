@@ -13,10 +13,16 @@ function notFoundPage() {
       outputDirectory = resolve(config.root, config.build.outDir)
     },
     async closeBundle() {
-      const html = await readFile(resolve(outputDirectory, 'index.html'), 'utf8')
+      const html = await readFile(
+        resolve(outputDirectory, 'index.html'),
+        'utf8',
+      )
       await writeFile(
         resolve(outputDirectory, '404.html'),
-        html.replace('<head>', '<head>\n    <meta name="robots" content="noindex" data-route-robots />'),
+        html.replace(
+          '<head>',
+          '<head>\n    <meta name="robots" content="noindex" data-route-robots />',
+        ),
       )
     },
   }

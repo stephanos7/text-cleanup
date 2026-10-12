@@ -22,7 +22,14 @@ npm run dev
 ## Checks and build
 
 ```sh
+npm run format:check
 npm run lint
 npm run build
 npm run preview
 ```
+
+## Formatting
+
+Run `npm run format` to format the project, or `npm run format:check` to check formatting without changing files. Prettier uses two spaces, single quotes in JavaScript, and no optional semicolons. Generated output and the dependency lockfile are excluded.
+
+In VS Code, install the recommended **Prettier - Code formatter** extension (`esbenp.prettier-vscode`). This repository's `.vscode/settings.json` enables format-on-save for JavaScript, JSX, JSON, CSS, HTML, and Markdown. These settings apply only when this project is open and do not change your global editor preferences.

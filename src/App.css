@@ -37,7 +37,7 @@
 }
 
 .site-footer a:hover,
-.site-footer a[aria-current="page"] {
+.site-footer a[aria-current='page'] {
   text-decoration: underline;
 }
 
@@ -81,7 +81,9 @@
   border: 1px solid var(--mark-border);
   border-radius: 12px;
   background: var(--mark-bg);
-  font: 600 25px Georgia, serif;
+  font:
+    600 25px Georgia,
+    serif;
 }
 
 .app-mark span {
@@ -431,7 +433,11 @@ textarea:focus-visible {
 }
 
 .source-code code {
-  font: 13px/1.7 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font:
+    13px/1.7 ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
 }
 
 .source-code .token.comment,
