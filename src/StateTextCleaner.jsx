@@ -13,10 +13,35 @@ function HistoryIcon({ redo = false }) {
 }     
 
 export default function StateTextCleaner() {
-  const [text, setText] = useState("")
+  const [text, setText] = useState("Starter text")
   // const wordCount = text.present.trim()
   //   ? text.present.trim().split(/\s+/).length
   //   : 0;
+
+  const handleUpdateText = (event) => {
+    setText(event.target.value)
+  }
+
+  const handleRemoveExtraSpaces = () => {
+    setText(text.replace(/[ \t]+/g, " "))
+  }
+
+  const handleRemoveBlankLines = () => {
+    setText(
+      text
+        .split(/\r?\n/)
+        .filter((line) => line.trim() !== "")
+        .join("\n")
+    )
+  }
+
+  const handleJoinAllLines = () => {
+    setText(text.replace(/\r?\n/g, " "))
+  }
+
+  const handleMakeLowercase = () => {
+    setText(text.toLowerCase())
+  }   
 
   return (
     <div className="app">
@@ -25,7 +50,7 @@ export default function StateTextCleaner() {
           <span className="app-mark" aria-hidden="true">
             T<span>.</span>
           </span>
-          <h1>Text cleaner</h1>
+          <h1>[STATE] Text cleaner</h1>
         </div>
         <p>
           A little less clutter. A little more clarity. Just your text.
@@ -38,29 +63,29 @@ export default function StateTextCleaner() {
           <div className="clean-actions" role="group" aria-label="Clean text">
             <button
               className="action-button"
-              onClick={() => {}}
-              disabled={!text.present}
+              onClick={handleRemoveExtraSpaces}
+              disabled={!text}
             >
               Remove extra spaces
             </button>
             <button
               className="action-button"
-              onClick={() => {}}
-              disabled={!text.present}
+              onClick={handleRemoveBlankLines}
+              disabled={!text}
             >
               Remove blank lines
             </button>
             <button
               className="action-button"
-              onClick={() => {}}
-              disabled={!text.present}
+              onClick={handleJoinAllLines}
+              disabled={!text}
             >
               Join all lines
             </button>
             <button
               className="action-button"
-              onClick={() => {}}
-              disabled={!text.present}
+              onClick={handleMakeLowercase}
+              disabled={!text}
             >
               Make all lowercase
             </button>
@@ -98,8 +123,8 @@ export default function StateTextCleaner() {
           <textarea
             id="text-input"
             placeholder="Paste or type your text here…"
-            value={text.present}
-            onChange={() => {}}
+            value={text}
+            onChange={handleUpdateText}
             spellCheck="false"
           />
         </div>
