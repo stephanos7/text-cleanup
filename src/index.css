@@ -103,7 +103,13 @@ p {
 }
 
 .page-shell {
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
   color: var(--text);
   background: var(--page-bg);
+}
+
+.page-shell > main {
+  flex: 1;
 }

@@ -88,11 +88,12 @@ export default function StateTextCleaner() {
   return (
     <div className="app">
       <header className="page-header">
+        <span className="implementation-chip">Built with React useState</span>
         <div className="heading-row">
           <span className="app-mark" aria-hidden="true">
             T<span>.</span>
           </span>
-          <h1>[STATE] Text cleaner</h1>
+          <h1>Text cleaner</h1>
         </div>
         <p>
           A little less clutter. A little more clarity. Just your text.
