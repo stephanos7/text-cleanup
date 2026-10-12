@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link, NavLink, Route, Routes, useMatch } from 'react-router'
 import ReducerTextCleaner from './ReducerTextCleaner'
 import StateTextCleaner from './StateTextCleaner'
+import ImplementationDrawer from './ImplementationDrawer'
 import './App.css'
 
 function scrollToTop(event) {
@@ -46,6 +47,12 @@ function App() {
           <Route path="/state" element={<StateTextCleaner />} />
           <Route path="*" element={<p>Page not found.</p>} />
         </Routes>
+        {(isHomeRoute || isStateRoute) && (
+          <ImplementationDrawer
+            key={isStateRoute ? 'state' : 'reducer'}
+            implementation={isStateRoute ? 'state' : 'reducer'}
+          />
+        )}
       </main>
       <footer className="site-footer">
         <div data-nosnippet>
